@@ -1,0 +1,54 @@
+package bg.tu_varna.sit.f24621709.personalcalendar.service;
+
+import bg.tu_varna.sit.f24621709.personalcalendar.model.Calendar;
+import bg.tu_varna.sit.f24621709.personalcalendar.repository.CalendarRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class CalendarService {
+    private final CalendarRepository repository;
+    private Calendar currentCalendar;
+    private String currentPath;
+
+    public CalendarService(CalendarRepository repository) {
+        this.repository = repository;
+    }
+
+    public void open(String path) {
+        if (currentCalendar != null) {
+            throw new IllegalStateException("File already opened");
+        }
+
+        try {
+            Path filePath = Path.of(path);
+
+            if (Files.exists(filePath)) {
+                currentCalendar = repository.load(path);
+            } else {
+                Files.createFile(filePath);
+                currentCalendar = new Calendar(path);
+            }
+
+            currentPath = path;
+            System.out.println("Successfully opened " + filePath.getFileName());
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error opening file: " + e.getMessage());
+        }
+    }
+
+    public void close() {
+        if (currentCalendar == null) {
+            throw new IllegalStateException("No file opened.");
+        }
+        currentCalendar = null;
+        currentPath = null;
+        System.out.println("Successfully closed file.");
+    }
+
+    public boolean hasOpenFile() {
+        return currentCalendar != null;
+    }
+}
