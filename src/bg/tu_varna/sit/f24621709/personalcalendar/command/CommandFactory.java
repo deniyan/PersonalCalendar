@@ -23,6 +23,8 @@ public class CommandFactory {
                 return new CloseCommand(calendarService);
             case "open":
                 return new OpenCommand(calendarService);
+            case "save":
+                return new SaveCommand(calendarService);
             default:
                 throw new RuntimeException("Unknown command");
         }

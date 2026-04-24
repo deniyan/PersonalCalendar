@@ -14,6 +14,6 @@ public class OpenCommand implements Command{
         if (args.length < 2) {
             throw new IllegalArgumentException("No file.");
         }
-        service.open(args[1]);
+        this.service.open(args[1]);
     }
 }

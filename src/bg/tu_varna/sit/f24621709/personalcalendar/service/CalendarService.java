@@ -17,7 +17,7 @@ public class CalendarService {
     }
 
     public void open(String path) {
-        if (currentCalendar != null) {
+        if (hasOpenFile()) {
             throw new IllegalStateException("File already opened");
         }
 
@@ -40,15 +40,26 @@ public class CalendarService {
     }
 
     public void close() {
-        if (currentCalendar == null) {
+        if (!hasOpenFile()) {
             throw new IllegalStateException("No file opened.");
         }
         currentCalendar = null;
         currentPath = null;
         System.out.println("Successfully closed file.");
     }
-
+    public void save(){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        repository.save(currentPath, currentCalendar);
+        System.out.println("Successfully saved " + currentPath);
+    }
     public boolean hasOpenFile() {
-        return currentCalendar != null;
+        if (currentCalendar == null){
+            //throw new IllegalStateException("No file opened.");
+            return false;
+        }else{
+            return true;
+        }
     }
 }

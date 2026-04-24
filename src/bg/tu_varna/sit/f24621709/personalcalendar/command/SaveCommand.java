@@ -2,15 +2,15 @@ package bg.tu_varna.sit.f24621709.personalcalendar.command;
 
 import bg.tu_varna.sit.f24621709.personalcalendar.service.CalendarService;
 
-public class CloseCommand implements Command{
+public class SaveCommand implements Command{
     private final CalendarService calendarService;
 
-    public CloseCommand(CalendarService calendarService) {
+    public SaveCommand(CalendarService calendarService) {
         this.calendarService = calendarService;
     }
 
+    @Override
     public void execute(String[] args) {
-        this.calendarService.close();
-        System.out.println("Closed file");
+        calendarService.save();
     }
 }
