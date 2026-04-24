@@ -1,6 +1,7 @@
 package bg.tu_varna.sit.f24621709.personalcalendar.service;
 
 import bg.tu_varna.sit.f24621709.personalcalendar.model.Calendar;
+import bg.tu_varna.sit.f24621709.personalcalendar.model.Event;
 import bg.tu_varna.sit.f24621709.personalcalendar.repository.CalendarRepository;
 
 import java.io.IOException;
@@ -61,5 +62,13 @@ public class CalendarService {
         }else{
             return true;
         }
+    }
+
+    public void Book(String date, String starttime, String endtime, String name, String note){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        currentCalendar.addEvent(new Event(date, starttime, endtime, name, note));
+        System.out.println("Succesfully added event");
     }
 }
