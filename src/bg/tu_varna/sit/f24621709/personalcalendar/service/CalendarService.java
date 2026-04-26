@@ -10,17 +10,38 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class CalendarService {
-    private List<Event> holidays = new ArrayList<Event>();
+    private List<String> holidays = new ArrayList<>();
     private final CalendarRepository repository;
     private Calendar currentCalendar;
     private String currentPath;
 
     private void addHoliday(String date){
+        holidays.add(date);
+        List<Event> check = currentCalendar.getEventsList().stream().filter(e->e.getDate().equals(date)).toList();
+
+        if (!check.isEmpty()){
+            currentCalendar.getEventsList().removeAll(check);
+        }
 
     }
+    private boolean isHoliday(String date){
+        return holidays.contains(date);
+    }
+    public void holiday(String date){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
 
+        if (isHoliday(date)){
+            throw new IllegalStateException("The day is already a holiday.");
+        }
+
+        addHoliday(date);
+        System.out.println("Succesfully added a holiday.");
+    }
     public CalendarService(CalendarRepository repository) {
         this.repository = repository;
     }

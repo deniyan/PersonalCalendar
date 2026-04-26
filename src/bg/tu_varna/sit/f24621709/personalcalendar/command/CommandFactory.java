@@ -31,6 +31,8 @@ public class CommandFactory {
                 return new AgendaCommand(calendarService);
             case "find":
                 return new FindCommand(calendarService);
+            case "holiday":
+                return new HolidayCommand(calendarService);
             default:
                 throw new RuntimeException("Unknown command");
         }
