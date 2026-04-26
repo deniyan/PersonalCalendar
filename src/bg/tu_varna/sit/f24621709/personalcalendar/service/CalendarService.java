@@ -8,12 +8,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class CalendarService {
+    private List<Event> holidays = new ArrayList<Event>();
     private final CalendarRepository repository;
     private Calendar currentCalendar;
     private String currentPath;
+
+    private void addHoliday(String date){
+
+    }
 
     public CalendarService(CalendarRepository repository) {
         this.repository = repository;
@@ -79,7 +85,16 @@ public class CalendarService {
             throw new IllegalStateException("No file opened.");
         }
         List<Event> eventList = new ArrayList<>();
-        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).toList();
+        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).sorted(Comparator.comparing(Event::getDate)).toList();
+        return eventList;
+    }
+
+    public List<Event> find(String input){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        List<Event> eventList = new ArrayList<>();
+        eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().equals(input) || e.getNote().equals(input)).toList();
         return eventList;
     }
 }

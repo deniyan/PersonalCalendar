@@ -12,7 +12,11 @@ public class OpenCommand implements Command{
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Illegal file.");
+
+            // temp zum testen
+            // throw new IllegalArgumentException("Illegal file.");
+            this.service.open("calendar.xml");
+            return;
         }
         this.service.open(args[1]);
     }
