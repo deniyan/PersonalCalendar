@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendar {
-    private List<Event> eventList = new ArrayList<>();
+    private List<Event> eventsList = new ArrayList<>();
     private String path;
 
     public Calendar(String path) {
@@ -16,10 +16,10 @@ public class Calendar {
         return path;
     }
 
-    public List<Event> getEventList() {
-        return eventList;
+    public List<Event> getEventsList() {
+        return eventsList;
     }
     public void addEvent(Event event){
-        eventList.add(event);
+        eventsList.add(event);
     }
 }

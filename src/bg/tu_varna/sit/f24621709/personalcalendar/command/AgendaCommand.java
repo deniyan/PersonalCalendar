@@ -1,0 +1,24 @@
+package bg.tu_varna.sit.f24621709.personalcalendar.command;
+
+import bg.tu_varna.sit.f24621709.personalcalendar.model.Event;
+import bg.tu_varna.sit.f24621709.personalcalendar.service.CalendarService;
+
+public class AgendaCommand implements Command{
+    private final CalendarService calendarService;
+
+    public AgendaCommand(CalendarService calendarService) {
+        this.calendarService = calendarService;
+    }
+
+    @Override
+    public void execute(String[] args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Illegal command.");
+        }
+        //calendarService.agenda(args[1]);
+
+        for (Event event : calendarService.agenda(args[1])){
+            System.out.println(event.getName());
+        }
+    }
+}

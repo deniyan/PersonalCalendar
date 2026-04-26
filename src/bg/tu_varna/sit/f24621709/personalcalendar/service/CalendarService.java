@@ -7,6 +7,8 @@ import bg.tu_varna.sit.f24621709.personalcalendar.repository.CalendarRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CalendarService {
     private final CalendarRepository repository;
@@ -64,11 +66,20 @@ public class CalendarService {
         }
     }
 
-    public void Book(String date, String starttime, String endtime, String name, String note){
+    public void book(String date, String starttime, String endtime, String name, String note){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
         currentCalendar.addEvent(new Event(date, starttime, endtime, name, note));
         System.out.println("Succesfully added event");
+    }
+
+    public List<Event> agenda(String date){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        List<Event> eventList = new ArrayList<>();
+        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).toList();
+        return eventList;
     }
 }
