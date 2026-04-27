@@ -14,6 +14,15 @@ public class Application {
         Scanner scanner = new Scanner(System.in);
         CommandFactory factory = new CommandFactory(calendarService);
 
+        //temp for testing
+        calendarService.open("calendar.xml");
+        calendarService.book("2025-04-21", "09:00", "11:00", "Meeting", "Work");
+        calendarService.book("2025-04-22", "10:00", "12:00", "Gym", "Gym");
+        calendarService.book("2025-04-22", "13:00", "15:00", "Study", "School");
+        calendarService.book("2025-04-23", "08:30", "10:00", "Coffee", "Shop");
+        //
+
+
         while (true) {
 
             System.out.print("> ");

@@ -7,10 +7,9 @@ import bg.tu_varna.sit.f24621709.personalcalendar.repository.CalendarRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
 
 public class CalendarService {
     private List<String> holidays = new ArrayList<>();
@@ -117,5 +116,80 @@ public class CalendarService {
         List<Event> eventList = new ArrayList<>();
         eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().equals(input) || e.getNote().equals(input)).toList();
         return eventList;
+    }
+
+    public List<String> busyDays(String from, String to){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        List<String> result = new ArrayList<>();
+
+        double monday = 0, tuesday = 0, wednesday = 0, thursday = 0, friday = 0, saturday = 0, sunday = 0;
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDay = LocalDate.parse(to);
+
+        for (Event event : currentCalendar.getEventsList()){
+            LocalDate date = LocalDate.parse(event.getDate());
+
+            if (!date.isBefore(fromDate) && !date.isAfter(toDay)){
+                DayOfWeek dayOfWeek = date.getDayOfWeek();
+                double hours = calculateHours(event.getStarttime(), event.getEndtime());
+                switch (dayOfWeek){
+                    case DayOfWeek.MONDAY:
+                        monday += hours;
+                        break;
+                    case  DayOfWeek.TUESDAY:
+                        tuesday += hours;
+                        break;
+                    case DayOfWeek.WEDNESDAY:
+                        wednesday += hours;
+                        break;
+                    case DayOfWeek.THURSDAY:
+                        thursday += hours;
+                        break;
+                    case DayOfWeek.FRIDAY:
+                        friday += hours;
+                        break;
+                    case DayOfWeek.SATURDAY:
+                        saturday += hours;
+                        break;
+                    case DayOfWeek.SUNDAY:
+                        sunday += hours;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Невалидна дата");
+                }
+            }
+        }
+        if (monday > 0){
+            result.add("MONDAY ->" + monday + "hours\n");
+        }
+        if (tuesday > 0) {
+            result.add("TUESDAY ->" + tuesday + "hours\n");
+        }
+        if (wednesday > 0) {
+            result.add("WEDNESDAY ->" + wednesday + "hours\n");
+        }
+        if (thursday > 0) {
+            result.add("THURSDAY ->" + thursday + "hours\n");
+        }
+        if (friday > 0) {
+            result.add("FRIDAY ->" + friday + "hours\n");
+        }
+        if (saturday > 0) {
+            result.add("SATURSAY ->" + saturday + "hours\n");
+        }
+        if (sunday > 0) {
+            result.add("SUNDAY ->" + sunday + "hours\n");
+        }
+        return result;
+    }
+    private double calculateHours(String start, String end){
+        String[] s = start.split(":");
+        String[] t = end.split(":");
+
+        int startTime = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+        int endTime = Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+        return (endTime - startTime) / 60.0;
     }
 }
