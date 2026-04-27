@@ -162,25 +162,25 @@ public class CalendarService {
             }
         }
         if (monday > 0){
-            result.add("MONDAY ->" + monday + "hours\n");
+            result.add("MONDAY ->" + monday + "hours");
         }
         if (tuesday > 0) {
-            result.add("TUESDAY ->" + tuesday + "hours\n");
+            result.add("TUESDAY ->" + tuesday + "hours");
         }
         if (wednesday > 0) {
-            result.add("WEDNESDAY ->" + wednesday + "hours\n");
+            result.add("WEDNESDAY ->" + wednesday + "hours");
         }
         if (thursday > 0) {
-            result.add("THURSDAY ->" + thursday + "hours\n");
+            result.add("THURSDAY ->" + thursday + "hours");
         }
         if (friday > 0) {
-            result.add("FRIDAY ->" + friday + "hours\n");
+            result.add("FRIDAY ->" + friday + "hours");
         }
         if (saturday > 0) {
-            result.add("SATURSAY ->" + saturday + "hours\n");
+            result.add("SATURSAY ->" + saturday + "hours");
         }
         if (sunday > 0) {
-            result.add("SUNDAY ->" + sunday + "hours\n");
+            result.add("SUNDAY ->" + sunday + "hours");
         }
         return result;
     }

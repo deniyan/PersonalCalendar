@@ -15,7 +15,8 @@ public class BusyDays implements Command{
         if (args.length != 3) {
             throw new IllegalArgumentException("Illegal command.");
         }
-        System.out.println(calendarService.busyDays(args[1], args[2]));
-
+        for (String result : calendarService.busyDays(args[1], args[2])) {
+            System.out.println(result);
+        }
     }
 }
