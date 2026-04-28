@@ -245,4 +245,11 @@ public class CalendarService {
         }
         System.out.println("No event found.");
     }
+    public void saveAs(String path){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        repository.save(path, currentCalendar);
+        System.out.println("Successfully saved " + path);
+    }
 }

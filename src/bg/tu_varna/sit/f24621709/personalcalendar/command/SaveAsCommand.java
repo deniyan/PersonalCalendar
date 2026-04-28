@@ -2,18 +2,18 @@ package bg.tu_varna.sit.f24621709.personalcalendar.command;
 
 import bg.tu_varna.sit.f24621709.personalcalendar.service.CalendarService;
 
-public class SaveCommand implements Command{
-    private final CalendarService calendarService;
+public class SaveAsCommand implements Command{
+    private final CalendarService service;
 
-    public SaveCommand(CalendarService calendarService) {
-        this.calendarService = calendarService;
+    public SaveAsCommand(CalendarService service) {
+        this.service = service;
     }
 
     @Override
     public void execute(String[] args) {
-        if (args.length != 1) {
+        if (args.length != 3) {
             throw new IllegalArgumentException("Illegal command.");
         }
-        calendarService.save();
+        service.saveAs(args[2]);
     }
 }

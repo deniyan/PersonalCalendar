@@ -24,6 +24,9 @@ public class CommandFactory {
             case "open":
                 return new OpenCommand(calendarService);
             case "save":
+                if (tokens.length > 1 && tokens[1].equalsIgnoreCase("as")){
+                    return new SaveAsCommand(calendarService);
+                }
                 return new SaveCommand(calendarService);
             case "book":
                 return new BookCommand(calendarService);
