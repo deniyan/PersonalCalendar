@@ -1,0 +1,30 @@
+<calendar>
+	<event>
+		<date>2025-04-21</date>
+		<starttime>09:00</starttime>
+		<endtime>11:00</endtime>
+		<name>Meeting</name>
+		<note>Work</note>
+	</event>
+	<event>
+		<date>2025-04-22</date>
+		<starttime>10:00</starttime>
+		<endtime>12:00</endtime>
+		<name>Gym</name>
+		<note>Gym</note>
+	</event>
+	<event>
+		<date>2025-04-22</date>
+		<starttime>13:00</starttime>
+		<endtime>15:00</endtime>
+		<name>Study</name>
+		<note>School</note>
+	</event>
+	<event>
+		<date>2025-04-23</date>
+		<starttime>08:30</starttime>
+		<endtime>10:00</endtime>
+		<name>Coffee</name>
+		<note>Shop</note>
+	</event>
+</calendar>
