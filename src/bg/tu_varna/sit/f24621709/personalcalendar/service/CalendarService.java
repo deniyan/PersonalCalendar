@@ -231,4 +231,18 @@ public class CalendarService {
         }
         return true;
     }
+    public void unbook(String date, String starttime, String endtime){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+
+        for (Event event : currentCalendar.getEventsList()){
+            if (event.getDate().equals(date) && event.getStarttime().equals(starttime) && event.getEndtime().equals(endtime)){
+                currentCalendar.removeEvent(event);
+                System.out.println("Successfully removed event.");
+                return;
+            }
+        }
+        System.out.println("No event found.");
+    }
 }

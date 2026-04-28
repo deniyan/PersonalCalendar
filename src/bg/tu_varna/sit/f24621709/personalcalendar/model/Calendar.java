@@ -22,4 +22,7 @@ public class Calendar {
     public void addEvent(Event event){
         eventsList.add(event);
     }
+    public void removeEvent(Event event){
+        eventsList.remove(event);
+    }
 }

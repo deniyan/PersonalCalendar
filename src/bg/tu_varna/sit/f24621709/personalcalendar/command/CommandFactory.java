@@ -37,6 +37,8 @@ public class CommandFactory {
                 return new BusyDaysCommand(calendarService);
             case "findslot":
                 return new FindSlotCommand(calendarService);
+            case "unbook":
+                return new UnBookCommand(calendarService);
             default:
                 throw new RuntimeException("Unknown command");
         }
