@@ -34,7 +34,9 @@ public class CommandFactory {
             case "holiday":
                 return new HolidayCommand(calendarService);
             case "busydays":
-                return new BusyDays(calendarService);
+                return new BusyDaysCommand(calendarService);
+            case "findslot":
+                return new FindSlotCommand(calendarService);
             default:
                 throw new RuntimeException("Unknown command");
         }

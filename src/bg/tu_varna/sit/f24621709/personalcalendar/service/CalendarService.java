@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class CalendarService {
@@ -191,5 +192,43 @@ public class CalendarService {
         int startTime = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
         int endTime = Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
         return (endTime - startTime) / 60.0;
+    }
+
+    public String findSlot(String fromDate, String hours){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        LocalDate date = LocalDate.parse(fromDate);
+        int duration = Integer.parseInt(hours) * 60;
+
+        while (true){
+            LocalDate currentDate = date;
+            List<Event> eventList = currentCalendar.getEventsList().stream().filter(e -> e.getDate().equals(currentDate.toString())).toList();
+
+            for (int start = 8*60; start <= 17*60 - duration; start++) {
+                int endTime = start + duration;
+
+                if (isFree(eventList, start, endTime)){
+                    return date + " " + String.format("%02d:%02d", start / 60, start % 60) +
+                            "-" +
+                            String.format("%02d:%02d", endTime / 60, endTime % 60);
+                }
+            }
+            date = date.plusDays(1);
+        }
+    }
+    private boolean isFree(List<Event> events, int start, int end){
+        for (Event e : events) {
+            String[] s = e.getStarttime().split(":");
+            String[] t = e.getEndtime().split(":");
+
+            int startTimeToMin = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+            int endTimeToMin = Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+
+            if (start < endTimeToMin && end > startTimeToMin) {
+                return false;
+            }
+        }
+        return true;
     }
 }
