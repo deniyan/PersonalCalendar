@@ -6,16 +6,14 @@ import java.util.List;
 public class Calendar {
     private List<Event> eventsList = new ArrayList<>();
     private String path;
+    private List<Holiday> holidayList = new ArrayList<>();
 
     public Calendar(String path) {
         this.path = path;
     }
-
-
     public String getPath() {
         return path;
     }
-
     public List<Event> getEventsList() {
         return eventsList;
     }
@@ -24,5 +22,10 @@ public class Calendar {
     }
     public void removeEvent(Event event){
         eventsList.remove(event);
+    }
+
+    public List<Holiday> getHolidayList(){return holidayList;}
+    public void addHoliday(Holiday holiday){
+        holidayList.add(holiday);
     }
 }

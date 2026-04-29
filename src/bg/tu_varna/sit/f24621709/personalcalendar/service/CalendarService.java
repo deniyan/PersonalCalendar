@@ -2,6 +2,7 @@ package bg.tu_varna.sit.f24621709.personalcalendar.service;
 
 import bg.tu_varna.sit.f24621709.personalcalendar.model.Calendar;
 import bg.tu_varna.sit.f24621709.personalcalendar.model.Event;
+import bg.tu_varna.sit.f24621709.personalcalendar.model.Holiday;
 import bg.tu_varna.sit.f24621709.personalcalendar.repository.CalendarRepository;
 
 import java.io.IOException;
@@ -13,22 +14,21 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class CalendarService {
-    private List<String> holidays = new ArrayList<>();
     private final CalendarRepository repository;
     private Calendar currentCalendar;
     private String currentPath;
 
     private void addHoliday(String date){
-        holidays.add(date);
+        currentCalendar.addHoliday(new Holiday(date));
         List<Event> check = currentCalendar.getEventsList().stream().filter(e->e.getDate().equals(date)).toList();
 
         if (!check.isEmpty()){
             currentCalendar.getEventsList().removeAll(check);
         }
-
     }
+
     private boolean isHoliday(String date){
-        return holidays.contains(date);
+        return currentCalendar.getHolidayList().stream().anyMatch(e->e.getDate().equals(date));
     }
     public String holiday(String date){
         if (!hasOpenFile()){
@@ -207,7 +207,7 @@ public class CalendarService {
                 continue;
             }
 
-            if (holidays.contains(date.toString())){
+            if (isHoliday(date.toString())){
                 date = date.plusDays(1);
                 continue;
             }
