@@ -15,6 +15,6 @@ public class BookCommand implements Command{
             throw new IllegalArgumentException("Illegal file.");
         }
 
-        calendarService.book(args[1], args[2], args[3], args[4], args[5]);
+        System.out.println(calendarService.book(args[1], args[2], args[3], args[4], args[5]));
     }
 }

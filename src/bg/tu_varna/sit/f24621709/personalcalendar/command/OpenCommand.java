@@ -11,13 +11,10 @@ public class OpenCommand implements Command{
 
     @Override
     public void execute(String[] args) {
-        if (args.length < 2) {
-
-            // temp zum testen
+        if (args.length != 2) {
             throw new IllegalArgumentException("Illegal file.");
-            //this.service.open("calendar.xml");
-            //return;
         }
-        this.service.open(args[1]);
+
+        System.out.println(service.open(args[1]));
     }
 }

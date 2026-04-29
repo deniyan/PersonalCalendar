@@ -11,6 +11,6 @@ public class CloseCommand implements Command{
 
     public void execute(String[] args) {
         this.calendarService.close();
-        System.out.println("Closed file");
+        System.out.println("Successfully closed file.");
     }
 }

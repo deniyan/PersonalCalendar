@@ -58,7 +58,6 @@ public class XmlCalendarRepository implements CalendarRepository {
             xml.append("\t</event>\n");
         }
         xml.append("</calendar>");
-        //System.out.println("Saving to XML: " + path);
         try {
             Files.writeString(Path.of(path), xml.toString());
         }catch (IOException e){

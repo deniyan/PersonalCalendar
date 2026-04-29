@@ -14,6 +14,6 @@ public class UnBookCommand implements Command{
         if (args.length != 4){
             throw new IllegalArgumentException("Illegal command.");
         }
-        service.unbook(args[1], args[2], args[3]);
+        System.out.println(service.unbook(args[1], args[2], args[3]));
     }
 }

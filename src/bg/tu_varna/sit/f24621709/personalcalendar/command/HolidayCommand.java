@@ -14,6 +14,6 @@ public class HolidayCommand implements Command{
         if (args.length != 2){
             throw new IllegalArgumentException("Illegal command.");
         }
-        calendarService.holiday(args[1]);
+        System.out.println(calendarService.holiday(args[1]));
     }
 }

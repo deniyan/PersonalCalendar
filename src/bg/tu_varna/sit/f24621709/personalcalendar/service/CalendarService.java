@@ -30,7 +30,7 @@ public class CalendarService {
     private boolean isHoliday(String date){
         return holidays.contains(date);
     }
-    public void holiday(String date){
+    public String holiday(String date){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
@@ -40,13 +40,13 @@ public class CalendarService {
         }
 
         addHoliday(date);
-        System.out.println("Succesfully added a holiday.");
+        return "Successfully added a holiday.";
     }
     public CalendarService(CalendarRepository repository) {
         this.repository = repository;
     }
 
-    public void open(String path) {
+    public String open(String path) {
         if (hasOpenFile()) {
             throw new IllegalStateException("File already opened");
         }
@@ -62,7 +62,7 @@ public class CalendarService {
             }
 
             currentPath = path;
-            System.out.println("Successfully opened " + filePath.getFileName());
+            return "Successfully opened " + filePath.getFileName();
 
         } catch (IOException e) {
             throw new RuntimeException("Error opening file: " + e.getMessage());
@@ -75,14 +75,13 @@ public class CalendarService {
         }
         currentCalendar = null;
         currentPath = null;
-        System.out.println("Successfully closed file.");
     }
-    public void save(){
+    public String save(){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
         repository.save(currentPath, currentCalendar);
-        //System.out.println("Successfully saved " + currentPath);
+        return currentPath;
     }
     public boolean hasOpenFile() {
         if (currentCalendar == null){
@@ -93,12 +92,12 @@ public class CalendarService {
         }
     }
 
-    public void book(String date, String starttime, String endtime, String name, String note){
+    public String book(String date, String starttime, String endtime, String name, String note){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
         currentCalendar.addEvent(new Event(date, starttime, endtime, name, note));
-        System.out.println("Succesfully added event");
+        return "Successfully added event";
     }
 
     public List<Event> agenda(String date){
@@ -231,7 +230,7 @@ public class CalendarService {
         }
         return true;
     }
-    public void unbook(String date, String starttime, String endtime){
+    public String unbook(String date, String starttime, String endtime){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
@@ -239,18 +238,17 @@ public class CalendarService {
         for (Event event : currentCalendar.getEventsList()){
             if (event.getDate().equals(date) && event.getStarttime().equals(starttime) && event.getEndtime().equals(endtime)){
                 currentCalendar.removeEvent(event);
-                System.out.println("Successfully removed event.");
-                return;
+                return "Successfully removed event.";
             }
         }
-        System.out.println("No event found.");
+        return "No event found.";
     }
-    public void saveAs(String path){
+    public String saveAs(String path){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
         repository.save(path, currentCalendar);
-        System.out.println("Successfully saved " + path);
+        return path;
     }
     public void change(String date, String starttime, String option, String newValue){
         if (!hasOpenFile()){
