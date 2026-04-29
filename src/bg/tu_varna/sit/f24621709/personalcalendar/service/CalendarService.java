@@ -82,7 +82,7 @@ public class CalendarService {
             throw new IllegalStateException("No file opened.");
         }
         repository.save(currentPath, currentCalendar);
-        System.out.println("Successfully saved " + currentPath);
+        //System.out.println("Successfully saved " + currentPath);
     }
     public boolean hasOpenFile() {
         if (currentCalendar == null){
@@ -106,7 +106,7 @@ public class CalendarService {
             throw new IllegalStateException("No file opened.");
         }
         List<Event> eventList = new ArrayList<>();
-        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).sorted(Comparator.comparing(Event::getDate)).toList();
+        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).sorted(Comparator.comparing(Event::getStarttime)).toList();
         return eventList;
     }
 
@@ -115,7 +115,7 @@ public class CalendarService {
             throw new IllegalStateException("No file opened.");
         }
         List<Event> eventList = new ArrayList<>();
-        eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().equals(input) || e.getNote().equals(input)).toList();
+        eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().contains(input) || e.getNote().contains(input)).toList();
         return eventList;
     }
 
@@ -260,10 +260,22 @@ public class CalendarService {
             if (e.getDate().equals(date) && e.getStarttime().equals(starttime)){
                 switch (option){
                     case "date":
+                        e.setDate(newValue);
                         return;
                     case "starttime":
+                        e.setStarttime(newValue);
                         return;
-
+                    case "endtime":
+                        e.setEndtime(newValue);
+                        return;
+                    case "name":
+                        e.setName(newValue);
+                        return;
+                    case "note":
+                        e.setNote(newValue);
+                        return;
+                    default:
+                        throw new IllegalArgumentException("Invalid command");
                 }
             }
         }

@@ -11,6 +11,9 @@ public class ChangeCommand implements Command{
 
     @Override
     public void execute(String[] args) {
-
+        if (args.length != 5){
+            throw new IllegalArgumentException("Illegal command.");
+        }
+        service.change(args[1], args[2], args[3], args[4]);
     }
 }
