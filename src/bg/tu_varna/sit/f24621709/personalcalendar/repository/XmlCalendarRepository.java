@@ -9,10 +9,38 @@ import java.nio.file.Path;
 
 public class XmlCalendarRepository implements CalendarRepository {
 
+    private String getText(String text, String tagStart, String tagEnd){
+        int start = text.indexOf(tagStart);
+        int end = text.indexOf(tagEnd);
+
+        if (start == -1 || end == -1){
+            return "";
+        }
+        return text.substring(start + tagStart.length(), end).trim();
+    }
+
     @Override
     public Calendar load(String path) {
-        System.out.println("Loading from XML: " + path);
-        return new Calendar(path);
+        Calendar calendar = new Calendar(path);
+
+        try {
+            String files = Files.readString(Path.of(path));
+            String[] events = files.split("<event>");
+
+            for (int i = 1; i < events.length; i++) {
+                String e = events[i];
+                String date = getText(e, "<date>", "</date>");
+                String starttime = getText(e, "<starttime>", "</starttime>");
+                String endtime = getText(e, "<endtime>", "</endtime>");
+                String name = getText(e, "<name>", "</name>");
+                String note = getText(e, "<note>", "</note>");
+
+                calendar.addEvent(new Event(date, starttime, endtime, name, note));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return calendar;
     }
 
     @Override

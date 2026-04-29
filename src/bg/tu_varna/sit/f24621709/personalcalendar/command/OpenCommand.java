@@ -14,9 +14,9 @@ public class OpenCommand implements Command{
         if (args.length < 2) {
 
             // temp zum testen
-            // throw new IllegalArgumentException("Illegal file.");
-            this.service.open("calendar.xml");
-            return;
+            throw new IllegalArgumentException("Illegal file.");
+            //this.service.open("calendar.xml");
+            //return;
         }
         this.service.open(args[1]);
     }
