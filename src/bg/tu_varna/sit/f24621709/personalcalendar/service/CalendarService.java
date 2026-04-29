@@ -104,8 +104,7 @@ public class CalendarService {
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
-        List<Event> eventList = new ArrayList<>();
-        eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).sorted(Comparator.comparing(Event::getStarttime)).toList();
+        List<Event> eventList = currentCalendar.getEventsList().stream().filter(x->x.getDate().equals(date)).sorted(Comparator.comparing(Event::getStarttime)).toList();
         return eventList;
     }
 
@@ -113,8 +112,7 @@ public class CalendarService {
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
-        List<Event> eventList = new ArrayList<>();
-        eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().contains(input) || e.getNote().contains(input)).toList();
+        List<Event> eventList = currentCalendar.getEventsList().stream().filter(e -> e.getName().contains(input) || e.getNote().contains(input)).toList();
         return eventList;
     }
 
@@ -177,7 +175,7 @@ public class CalendarService {
             result.add("FRIDAY ->" + friday + "hours");
         }
         if (saturday > 0) {
-            result.add("SATURSAY ->" + saturday + "hours");
+            result.add("SATURDAY ->" + saturday + "hours");
         }
         if (sunday > 0) {
             result.add("SUNDAY ->" + sunday + "hours");
@@ -203,6 +201,16 @@ public class CalendarService {
         while (true){
             LocalDate currentDate = date;
             List<Event> eventList = currentCalendar.getEventsList().stream().filter(e -> e.getDate().equals(currentDate.toString())).toList();
+
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
+                date = date.plusDays(1);
+                continue;
+            }
+
+            if (holidays.contains(date.toString())){
+                date = date.plusDays(1);
+                continue;
+            }
 
             for (int start = 8*60; start <= 17*60 - duration; start++) {
                 int endTime = start + duration;
@@ -250,32 +258,68 @@ public class CalendarService {
         repository.save(path, currentCalendar);
         return path;
     }
-    public void change(String date, String starttime, String option, String newValue){
+
+    private int toMinutes(String time){
+        String[] t = time.split(":");
+        return Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+    }
+    public String change(String date, String starttime, String option, String newValue){
         if (!hasOpenFile()){
             throw new IllegalStateException("No file opened.");
         }
         for (Event e : currentCalendar.getEventsList()){
             if (e.getDate().equals(date) && e.getStarttime().equals(starttime)){
+                String newDate = e.getDate();
+                String newStarttime = e.getStarttime();
+                String newEndTime = e.getEndtime();
+
                 switch (option){
                     case "date":
-                        e.setDate(newValue);
-                        return;
+                        newDate = newValue;
+                        break;
                     case "starttime":
-                        e.setStarttime(newValue);
-                        return;
+                        newStarttime = newValue;
+                        break;
                     case "endtime":
-                        e.setEndtime(newValue);
-                        return;
+                       newEndTime = newValue;
+                        break;
                     case "name":
                         e.setName(newValue);
-                        return;
+                        return "Changed";
                     case "note":
                         e.setNote(newValue);
-                        return;
+                        return "Changed";
                     default:
                         throw new IllegalArgumentException("Invalid command");
                 }
+
+
+                if (toMinutes(newStarttime) >= toMinutes(newEndTime)){
+                    return "Impossible time range!";
+                }
+
+                for (Event other : currentCalendar.getEventsList()){
+                    if (other == e){
+                        continue;
+                    }
+                    if (other.getDate().equals(newDate)){
+                        int otherStart = toMinutes(other.getStarttime());
+                        int otherEnd = toMinutes(other.getEndtime());
+
+                        int newStart = toMinutes(newStarttime);
+                        int newEnd = toMinutes(newEndTime);
+
+                        if (newStart < otherEnd && newEnd > otherStart){
+                            return "There is time conflict.";
+                        }
+                    }
+                }
+                e.setDate(newDate);
+                e.setStarttime(newStarttime);
+                e.setEndtime(newEndTime);
+                return "Changed successfully.";
             }
         }
+        return "Event not found";
     }
 }

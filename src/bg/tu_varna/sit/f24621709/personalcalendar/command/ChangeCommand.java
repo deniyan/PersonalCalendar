@@ -14,6 +14,6 @@ public class ChangeCommand implements Command{
         if (args.length != 5){
             throw new IllegalArgumentException("Illegal command.");
         }
-        service.change(args[1], args[2], args[3], args[4]);
+        System.out.println(service.change(args[1], args[2], args[3], args[4]));
     }
 }

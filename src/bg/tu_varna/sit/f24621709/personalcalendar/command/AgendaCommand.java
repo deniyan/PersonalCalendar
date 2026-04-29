@@ -15,10 +15,10 @@ public class AgendaCommand implements Command{
         if (args.length != 2) {
             throw new IllegalArgumentException("Illegal command.");
         }
-        //calendarService.agenda(args[1]);
 
         for (Event event : calendarService.agenda(args[1])){
-            System.out.println(event.getName());
+            System.out.println(event.getDate() + " " + event.getStarttime() + "-" + event.getEndtime()
+             + " | " + event.getName() + " | " + event.getNote());
         }
     }
 }
