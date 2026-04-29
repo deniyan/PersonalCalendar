@@ -252,4 +252,20 @@ public class CalendarService {
         repository.save(path, currentCalendar);
         System.out.println("Successfully saved " + path);
     }
+    public void change(String date, String starttime, String option, String newValue){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        for (Event e : currentCalendar.getEventsList()){
+            if (e.getDate().equals(date) && e.getStarttime().equals(starttime)){
+                switch (option){
+                    case "date":
+                        return;
+                    case "starttime":
+                        return;
+
+                }
+            }
+        }
+    }
 }
