@@ -191,17 +191,10 @@ public class CalendarService {
         return (endTime - startTime) / 60.0;
     }
 
-    public String findSlot(String fromDate, String hours){
-        if (!hasOpenFile()){
-            throw new IllegalStateException("No file opened.");
-        }
-        LocalDate date = LocalDate.parse(fromDate);
-        int duration = Integer.parseInt(hours) * 60;
+    private String findSlotHelper(LocalDate fromDate, int duration, List<Calendar> calendarList){
+        LocalDate date = fromDate;
 
         while (true){
-            LocalDate currentDate = date;
-            List<Event> eventList = currentCalendar.getEventsList().stream().filter(e -> e.getDate().equals(currentDate.toString())).toList();
-
             if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
                 date = date.plusDays(1);
                 continue;
@@ -210,6 +203,15 @@ public class CalendarService {
             if (isHoliday(date.toString())){
                 date = date.plusDays(1);
                 continue;
+            }
+
+            List<Event> eventList = new ArrayList<>();
+            for (Calendar calendar : calendarList){
+                for (Event event : calendar.getEventsList()){
+                    if (event.getDate().equals(date.toString())){
+                        eventList.add(event);
+                    }
+                }
             }
 
             for (int start = 8*60; start <= 17*60 - duration; start++) {
@@ -224,6 +226,32 @@ public class CalendarService {
             date = date.plusDays(1);
         }
     }
+    public String findSlot(String fromDate, String hours){
+        if (!hasOpenFile()){
+            throw new IllegalStateException("No file opened.");
+        }
+        LocalDate date = LocalDate.parse(fromDate);
+        int duration = Integer.parseInt(hours) * 60;
+
+        List<Calendar> calendar = new ArrayList<>();
+        calendar.add(currentCalendar);
+        return findSlotHelper(date, duration, calendar);
+    }
+
+
+    public String findSlotWith(String fromDate, String hours, String path){
+        if(!hasOpenFile()){
+            throw new IllegalArgumentException("No file opened.");
+        }
+        LocalDate date = LocalDate.parse(fromDate);
+        int duration = toMinutes(hours) * 60;
+
+        List<Calendar> calendars = new ArrayList<>();
+        calendars.add(currentCalendar);
+        calendars.add(repository.load(path));
+        return findSlotHelper(date, duration, calendars);
+    }
+
     private boolean isFree(List<Event> events, int start, int end){
         for (Event e : events) {
             String[] s = e.getStarttime().split(":");
@@ -261,6 +289,9 @@ public class CalendarService {
 
     private int toMinutes(String time){
         String[] t = time.split(":");
+        if (t.length == 1){
+            return Integer.parseInt(t[0]) * 60;
+        }
         return Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
     }
     public String change(String date, String starttime, String option, String newValue){
@@ -285,14 +316,17 @@ public class CalendarService {
                         break;
                     case "name":
                         e.setName(newValue);
-                        return "Changed";
+                        return "Changed successfully.";
                     case "note":
                         e.setNote(newValue);
-                        return "Changed";
+                        return "Changed successfully.";
                     default:
                         throw new IllegalArgumentException("Invalid command");
                 }
 
+                if(isHoliday(newDate)){
+                    return "Cannot move event for holiday";
+                }
 
                 if (toMinutes(newStarttime) >= toMinutes(newEndTime)){
                     return "Impossible time range!";

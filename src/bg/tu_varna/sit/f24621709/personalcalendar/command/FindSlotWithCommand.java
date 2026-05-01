@@ -2,21 +2,19 @@ package bg.tu_varna.sit.f24621709.personalcalendar.command;
 
 import bg.tu_varna.sit.f24621709.personalcalendar.service.CalendarService;
 
-import java.nio.file.Path;
-
-public class SaveAsCommand implements Command{
+public class FindSlotWithCommand implements Command{
     private final CalendarService service;
 
-    public SaveAsCommand(CalendarService service) {
+    public FindSlotWithCommand(CalendarService service) {
         this.service = service;
     }
 
     @Override
     public void execute(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 4) {
             throw new IllegalArgumentException("Illegal command.");
         }
-        String filename = service.saveAs(args[2]);
-        System.out.println("Successfully saved " + Path.of(filename).getFileName());
+
+        System.out.println(service.findSlotWith(args[1], args[2], args[3]));
     }
 }

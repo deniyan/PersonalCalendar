@@ -10,6 +10,10 @@ public class CloseCommand implements Command{
     }
 
     public void execute(String[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Illegal command.");
+        }
+
         this.calendarService.close();
         System.out.println("Successfully closed file.");
     }

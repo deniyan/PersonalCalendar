@@ -42,6 +42,7 @@ public class Application {
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                System.exit(1);
             }
         }
 
